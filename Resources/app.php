@@ -22,7 +22,7 @@ $app = (new \Arya\Application($injector))
     ->setOption("routing.cache_file", __DIR__."/../route.cache")
 
 	->route('GET', '/', function() {
-		return (new Reponse)->setHeader('Location', 'http://fwtools.de/style')->setStatus(301);
+		return (new Response)->setHeader('Location', 'http://fwtools.de/style')->setStatus(301);
 	})
 
 	->route('GET', '/bettersunfire/style.css', 'Style/BetterSunfire::main')
