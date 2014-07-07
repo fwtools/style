@@ -1,0 +1,10 @@
+# temp files
+~*
+.fuse_*
+
+# merge files
+*.orig
+
+# IDE files
+/.idea
+/.idea/*
