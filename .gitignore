@@ -8,3 +8,5 @@
 # IDE files
 /.idea
 /.idea/*
+
+/config.php

@@ -1,10 +1,9 @@
 <?php
 
-set_include_path(__DIR__."/../:.");
 error_reporting(-1);
 
-require('autoload.php');
-require('functions.php');
+require __DIR__ . '/../autoload.php';
+require __DIR__ . '/../functions.php';
 
 use Arya\Request;
 use Arya\Response;
