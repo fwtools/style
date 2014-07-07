@@ -9,4 +9,5 @@
 /.idea
 /.idea/*
 
+# configuration
 /config.php
