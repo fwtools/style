@@ -5,8 +5,8 @@ spl_autoload_register(function($class) {
 		return;
 
 	$class = str_replace('\\', '/', $class);
-	if (substr($class, 6) == "Style\\") {
-		$file = STYLES_PATH . "/{$class}.php";
+	if (substr($class, 0, 6) == "Style/") {
+		$file = STYLES_PATH . "/".substr($class, 6).".php";
 	} else {
 		$file = __DIR__ . "/{$class}.php";
 	}
