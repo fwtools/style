@@ -1,11 +1,15 @@
 <?php
 
 spl_autoload_register(function($class) {
-	if (!preg_match("@^(App)\\\\@", $class))
+	if (!preg_match("@^(App|Style)\\\\@", $class))
 		return;
 
 	$class = str_replace('\\', '/', $class);
-	$file = __DIR__ . "/{$class}.php";
+	if (substr($class, 6) == "Style\\") {
+		$file = STYLES_PATH . "/{$class}.php";
+	} else {
+		$file = __DIR__ . "/{$class}.php";
+	}
 
     if (file_exists($file)) {
 		require $file;
