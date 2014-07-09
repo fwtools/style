@@ -13,3 +13,6 @@
 [submodule "Styles/LightNoise"]
 	path = Styles/LightNoise
 	url = ../lightnoise
+[submodule "Styles/kstyle"]
+	path = Styles/kstyle
+	url = ../kstyle
