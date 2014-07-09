@@ -22,7 +22,7 @@ $injector->share($db);
     ->setOption("routing.cache_file", __DIR__."/../route.cache")
 
 	->route('GET', '/', function() {
-		return (new Response)->setHeader('Location', 'http://fwtools.de/style')->setStatus(302);
+		return (new Response)->setHeader('Location', 'http://fwtools.de/style')->setStatus(301);
 	})
 
 	->before(function (Request $request) use (&$injector) {
@@ -33,7 +33,6 @@ $injector->share($db);
 	->before(function (Response $response, StyleCache $cache) {
 		if (($style = $cache->get()) !== false) {
 			$response->setBody($style);
-
 			return true;
 		}
 	})

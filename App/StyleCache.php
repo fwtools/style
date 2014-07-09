@@ -10,7 +10,7 @@ class StyleCache {
 		$this->components = $components->getAll();
 		sort($components);
 
-		$this->file = __DIR__."/../cache/".str_replace($path, "/", "-")."-".implode("-", $components).".css";
+		$this->file = __DIR__."/../Cache/".str_replace($path, "/", "-")."-".implode("-", $components).".css";
 	}
 
 	public function get() {
