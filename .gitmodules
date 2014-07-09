@@ -1,3 +1,15 @@
 [submodule "Arya"]
 	path = Arya
 	url = https://github.com/rdlowrey/Arya
+[submodule "Styles/FlatLight"]
+	path = Styles/FlatLight
+	url = ../flatlight
+[submodule "Styles/BetterSunfire"]
+	path = Styles/BetterSunfire
+	url = ../bettersunfire
+[submodule "Styles/EpicSunfire"]
+	path = Styles/EpicSunfire
+	url = ../epicsunfire
+[submodule "Styles/LightNoise"]
+	path = Styles/LightNoise
+	url = ../lightnoise
