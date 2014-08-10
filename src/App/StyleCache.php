@@ -10,9 +10,10 @@ class StyleCache {
 		$components = $this->components = $components->getAll();
 		sort($components);
 
-		$this->file = CACHE_DIR . str_replace($path, "/", "-") . "-" . implode("-", $components) . ".css";
+		$style = str_replace("/", "-", str_replace("style.css", "", $path));
+		$comps = implode("-", $components);
 
-		var_dump($path);
+		$this->file = CACHE_DIR . $style . (empty($comps) ? "" : "_" . $comps) . ".css";
 	}
 
 	public function get() {
