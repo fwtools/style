@@ -13,4 +13,7 @@
 /config.php
 
 /gen/*
-/vendor/*
+
+# composer files
+/vendor
+composer.lock
