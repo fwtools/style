@@ -1,0 +1,18 @@
+{
+    "name": "fwtools/styles",
+    "description": "FWTools Styles",
+    "require": {
+        "rdlowrey/arya": "dev-master"
+    },
+    "minimum-stability": "dev",
+    "authors": [
+        {
+            "name": "Niklas Keller",
+            "email": "me@kelunik.com"
+        },
+		{
+			"name": "Bob Weinand",
+			"email": "bobwei9@hotmail.com"
+		}
+    ]
+}
