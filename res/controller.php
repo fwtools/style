@@ -7,12 +7,12 @@ require 'functions.php';
 require 'config.php';
 
 $loader = require 'vendor/autoload.php';
-$loader->add('App\\', __DIR__ . '/src/App');
-$loader->add('BetterSunfire\\', __DIR__ . '/src/BetterSunfire');
-$loader->add('EpicSunfire\\', __DIR__ . '/src/EpicSunfire');
-$loader->add('LightNoise\\', __DIR__ . '/src/LightNoise');
-$loader->add('FlatLight\\', __DIR__ . '/src/FlatLight');
-$loader->add('KStyle\\', __DIR__ . '/src/KStyle');
+$loader->add('App\\', __DIR__ . '/../src/App');
+$loader->add('BetterSunfire\\', __DIR__ . '/../src/BetterSunfire');
+$loader->add('EpicSunfire\\', __DIR__ . '/../src/EpicSunfire');
+$loader->add('LightNoise\\', __DIR__ . '/../src/LightNoise');
+$loader->add('FlatLight\\', __DIR__ . '/../src/FlatLight');
+$loader->add('KStyle\\', __DIR__ . '/../src/KStyle');
 
 use Arya\Request,
     Arya\Response;
