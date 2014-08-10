@@ -1,18 +1,15 @@
-[submodule "Arya"]
-	path = Arya
-	url = https://github.com/rdlowrey/Arya
-[submodule "Styles/FlatLight"]
-	path = Styles/FlatLight
+[submodule "src/FlatLight"]
+	path = src/FlatLight
 	url = ../flatlight
-[submodule "Styles/BetterSunfire"]
-	path = Styles/BetterSunfire
+[submodule "src/BetterSunfire"]
+	path = src/BetterSunfire
 	url = ../bettersunfire
-[submodule "Styles/EpicSunfire"]
-	path = Styles/EpicSunfire
+[submodule "src/EpicSunfire"]
+	path = src/EpicSunfire
 	url = ../epicsunfire
-[submodule "Styles/LightNoise"]
-	path = Styles/LightNoise
+[submodule "src/LightNoise"]
+	path = src/LightNoise
 	url = ../lightnoise
-[submodule "Styles/kstyle"]
-	path = Styles/kstyle
+[submodule "src/kstyle"]
+	path = src/kstyle
 	url = ../kstyle

@@ -16,7 +16,7 @@ $loader->add('KStyle\\', __DIR__ . '/src/KStyle');
 
 use Arya\Request,
     Arya\Response;
-use App\StyleCache;
+use App\StyleCache as StyleCache;
 
 try {
 	$db = require 'database.php';
