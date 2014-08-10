@@ -7,7 +7,7 @@ class StyleCache {
 	private $file;
 
 	public function __construct ($path, Components $components) {
-		$this->components = $components->getAll();
+		$components = $this->components = $components->getAll();
 		sort($components);
 
 		$this->file = CACHE_DIR . str_replace($path, "/", "-") . "-" . implode("-", $components) . ".css";
