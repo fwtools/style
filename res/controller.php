@@ -45,7 +45,7 @@ $injector->share($db);
 
 		$injector->share($components);
 		$injector->share(new \App\StyleCache($request['REQUEST_URI_PATH'], $components));
-	}, ["priority" => 100])
+	}, ["priority" => 1])
 
 	->before(function (Response $response, \App\StyleCache $cache) {
 		if (($style = $cache->get()) !== false) {
