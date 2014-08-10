@@ -16,7 +16,6 @@ $loader->add('KStyle\\', __DIR__ . '/src/KStyle');
 
 use Arya\Request,
     Arya\Response;
-use App\StyleCache as StyleCache;
 
 try {
 	$db = require 'database.php';
@@ -45,10 +44,10 @@ $injector->share($db);
         );
 
 		$injector->share($components);
-		$injector->share(new StyleCache($request['REQUEST_URI_PATH'], $components));
+		$injector->share(new \App\StyleCache($request['REQUEST_URI_PATH'], $components));
 	}, ["priority" => 100])
 
-	->before(function (Response $response, StyleCache $cache) {
+	->before(function (Response $response, \App\StyleCache $cache) {
 		if (($style = $cache->get()) !== false) {
 			$response->setBody($style);
 			return true;
@@ -61,7 +60,7 @@ $injector->share($db);
 	->route('GET', '/flatlight/v1/style.css', 'FlatLight/App::main')
 	->route('GET', '/kstyle/v1/style.css', 'KStyle/App::main')
 
-	->after(function (Response $response, StyleCache $cache) {
+	->after(function (Response $response, \App\StyleCache $cache) {
         $cache->set($response->getBody());
 	})
 
