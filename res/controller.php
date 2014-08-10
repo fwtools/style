@@ -35,7 +35,9 @@ $injector->share($db);
 		return (new Response)->setHeader('Location', 'http://fwtools.de/style')->setStatus(301);
 	})
 
-	->before(function (Request $request) use (&$injector) {
+	->before(function (Request $request, Response $response) use (&$injector) {
+        $response->setHeader('Content-Type', 'text/css; charset=utf-8');
+        
         $components = new \App\Components(
             array_intersect(
                 glob(__DIR__."/App/Components/*"),
@@ -45,6 +47,20 @@ $injector->share($db);
 
 		$injector->share($components);
 		$injector->share(new \App\StyleCache($request['REQUEST_URI_PATH'], $components));
+
+        /* CACHE */
+        $time = 240;
+        $exp_gmt = gmdate("D, d M Y H:i:s", time() + $time * 60) ." GMT";
+        $mod_gmt = gmdate("D, d M Y H:i:s", file_exists(__DIR__ . "/static/{$name}.css")
+                ? filemtime(__DIR__ . "/static/{$name}.css")
+                : time()
+        ) ." GMT";
+
+        $response->setHeader('Expires', $exp_gmt);
+        $response->setHeader('Last-Modified', $mod_gmt);
+        $response->setHeader('Cache-Control', 'private, max-age=' . (60 * $time));
+        $response->addHeader('Cache-Control', 'post-check=' . (60 * $time));
+        /* // CACHE */
 	}, ["priority" => 1])
 
 	->before(function (Response $response, \App\StyleCache $cache) {
@@ -54,14 +70,40 @@ $injector->share($db);
 		}
 	})
 
-	->route('GET', '/bettersunfire/v1/style.css', 'BetterSunfire/App::main')
-	->route('GET', '/epicsunfire/v1/style.css', 'EpicSunfire/App::main')
-    ->route('GET', '/lightnoise/v1/style.css', 'LightNoise/App::main')
-	->route('GET', '/flatlight/v1/style.css', 'FlatLight/App::main')
-	->route('GET', '/kstyle/v1/style.css', 'KStyle/App::main')
+	->route('GET', '/bettersunfire/v1/style.css', 'BetterSunfire/BetterSunfire::main')
+	->route('GET', '/epicsunfire/v1/style.css', 'EpicSunfire/EpicSunfire::main')
+    ->route('GET', '/lightnoise/v1/style.css', 'LightNoise/LightNoise::main')
+	->route('GET', '/flatlight/v1/style.css', 'FlatLight/FlatLight::main')
+	->route('GET', '/kstyle/v1/style.css', 'KStyle/KStyle::main')
 
 	->after(function (Response $response, \App\StyleCache $cache) {
-        $cache->set($response->getBody());
+        require_once 'lib/CssMin.php';
+
+        $filters = [
+            "ImportImports"                 => false,
+            "RemoveComments"                => true,
+            "RemoveEmptyRulesets"           => true,
+            "RemoveEmptyAtBlocks"           => true,
+            "ConvertLevel3AtKeyframes"      => false,
+            "ConvertLevel3Properties"       => true,
+            "Variables"                     => true,
+            "RemoveLastDelarationSemiColon" => true
+        ];
+
+        $plugins = [
+            "Variables"                     => true,
+            "ConvertFontWeight"             => true,
+            "ConvertHslColors"              => true,
+            "ConvertRgbColors"              => true,
+            "ConvertNamedColors"            => true,
+            "CompressColorValues"           => true,
+            "CompressUnitValues"            => true,
+            "CompressExpressionValues"      => true
+        ];
+
+        $body = $response->getBody();
+        $body = CssMin::minify($css, $filters, $plugins);
+        $cache->set($body);
 	})
 
 	->run();
