@@ -67,10 +67,14 @@ $injector->share($db);
 	->route('GET', '/flatlight/v1/style.css', 'FlatLight\FlatLight::main')
 	->route('GET', '/kstyle/v1/style.css', 'KStyle\KStyle::main')
 
+    ->route('GET', '/flatlight/v1/i/{name:[A-Za-z0-9_-]+}.{extension}', 'FlatLight\FlatLight::image')
+
 	->after(function (Request $request, Response $response, App\StyleCache $cache) {
-        if(!endsWith($request->get('REQUEST_URI_PATH'), '.css')) {
+        if(!$response->hasHeader('Content-Type'))
             return;
-        }
+
+        if(!startsWith($response->getHeader('Content-Type'), 'text/css'))
+            return;
 
         require_once 'lib/CssMin.php';
 
