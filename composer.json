@@ -14,5 +14,8 @@
 			"name": "Bob Weinand",
 			"email": "bobwei9@hotmail.com"
 		}
-    ]
+    ],
+    "autoload": {
+        "psr-4": { "": "src/" }
+    }
 }
