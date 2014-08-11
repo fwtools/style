@@ -61,11 +61,11 @@ $injector->share($db);
 		}
 	})
 
-	->route('GET', '/bettersunfire/v1/style.css', 'BetterSunfire/BetterSunfire::main')
-	->route('GET', '/epicsunfire/v1/style.css', 'EpicSunfire/EpicSunfire::main')
-    ->route('GET', '/lightnoise/v2/style.css', 'LightNoise/LightNoise::main')
-	->route('GET', '/flatlight/v1/style.css', 'FlatLight/FlatLight::main')
-	->route('GET', '/kstyle/v1/style.css', 'KStyle/KStyle::main')
+	->route('GET', '/bettersunfire/v1/style.css', 'BetterSunfire\BetterSunfire::main')
+	->route('GET', '/epicsunfire/v1/style.css', 'EpicSunfire\EpicSunfire::main')
+    ->route('GET', '/lightnoise/v2/style.css', 'LightNoise\LightNoise::main')
+	->route('GET', '/flatlight/v1/style.css', 'FlatLight\FlatLight::main')
+	->route('GET', '/kstyle/v1/style.css', 'KStyle\KStyle::main')
 
 	->after(function (Request $request, Response $response, App\StyleCache $cache) {
         if(!endsWith($request->get('REQUEST_URI_PATH'), '.css')) {
