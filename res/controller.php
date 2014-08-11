@@ -72,8 +72,6 @@ $injector->share($db);
             return;
         }
 
-        var_dump($response);
-
         require_once 'lib/CssMin.php';
 
         $filters = [
@@ -99,11 +97,7 @@ $injector->share($db);
         ];
 
         $body = $response->getBody();
-        var_dump($body);
-        print "<br><br><br>";
-
         $body = CssMin::minify($body, $filters, $plugins);
-        var_dump($body);
 
         $response->setBody($body);
 
