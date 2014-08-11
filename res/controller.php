@@ -35,7 +35,7 @@ $injector->share($db);
 		return (new Response)->setHeader('Location', 'http://fwtools.de/style')->setStatus(301);
 	})
 
-	->before(function (Request $request, Response $response, App\StyleCache $cache) use (&$injector) {
+	->before(function (Request $request, Response $response) use (&$injector) {
         $response->setHeader('Content-Type', 'text/css; charset=utf-8');
 
         $components = new \App\Components(
@@ -46,7 +46,7 @@ $injector->share($db);
         );
 
 		$injector->share($components);
-		$injector->share(new \App\StyleCache($request['REQUEST_URI_PATH'], $components));
+		$injector->share($cache = new \App\StyleCache($request['REQUEST_URI_PATH'], $components));
 
         /* CACHE */
         $time = 240;
