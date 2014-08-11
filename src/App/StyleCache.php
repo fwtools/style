@@ -23,4 +23,12 @@ class StyleCache {
 	public function set($style) {
 		file_put_contents($this->file, $style);
 	}
+
+	public function getTime() {
+		if(file_exists($this->file)) {
+			return filemtime($this->file);
+		} else {
+			return time();
+		}
+	}
 }

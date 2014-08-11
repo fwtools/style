@@ -46,15 +46,12 @@ $injector->share($db);
         );
 
 		$injector->share($components);
-		$injector->share($cache = new \App\StyleCache($request['REQUEST_URI_PATH'], $components));
+		$injector->share($cache = new App\StyleCache($request['REQUEST_URI_PATH'], $components));
 
         /* CACHE */
         $time = 240;
-        $exp_gmt = gmdate("D, d M Y H:i:s", time() + $time * 60) ." GMT";
-        $mod_gmt = gmdate("D, d M Y H:i:s", $cache->get() !== false
-                ? filemtime(__DIR__ . "/static/{$name}.css")
-                : time()
-        ) ." GMT";
+        $exp_gmt = gmdate("D, d M Y H:i:s", time() + $time * 60) . " GMT";
+        $mod_gmt = gmdate("D, d M Y H:i:s", $cache->getTime()) . " GMT";
 
         $response->setHeader('Expires', $exp_gmt);
         $response->setHeader('Last-Modified', $mod_gmt);
@@ -63,7 +60,7 @@ $injector->share($db);
         /* // CACHE */
 	}, ["priority" => 1])
 
-	->before(function (Response $response, \App\StyleCache $cache) {
+	->before(function (Response $response, App\StyleCache $cache) {
 		if (($style = $cache->get()) !== false) {
 			$response->setBody($style);
 			return true;
@@ -76,7 +73,11 @@ $injector->share($db);
 	->route('GET', '/flatlight/v1/style.css', 'FlatLight/FlatLight::main')
 	->route('GET', '/kstyle/v1/style.css', 'KStyle/KStyle::main')
 
-	->after(function (Response $response, \App\StyleCache $cache) {
+	->after(function (Request $request, Response $response, App\StyleCache $cache) {
+        if(!endsWith($request->getUri(), '.css')) {
+            return;
+        }
+
         require_once 'lib/CssMin.php';
 
         $filters = [
@@ -103,6 +104,7 @@ $injector->share($db);
 
         $body = $response->getBody();
         $body = CssMin::minify($css, $filters, $plugins);
+        $response->setBody($body);
         $cache->set($body);
 	})
 
