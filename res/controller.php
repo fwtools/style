@@ -74,7 +74,7 @@ $injector->share($db);
 	->route('GET', '/kstyle/v1/style.css', 'KStyle/KStyle::main')
 
 	->after(function (Request $request, Response $response, App\StyleCache $cache) {
-        if(!endsWith($request->getUri(), '.css')) {
+        if(!endsWith($request->get('REQUEST_URI_PATH'), '.css')) {
             return;
         }
 
