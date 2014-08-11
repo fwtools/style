@@ -50,7 +50,7 @@ $injector->share($db);
         $response->setHeader('Expires', $exp_gmt);
         $response->setHeader('Last-Modified', $mod_gmt);
         $response->setHeader('Cache-Control', 'private, max-age=' . (60 * $time));
-        $response->addHeader('Cache-Control', 'post-check=' . (60 * $time));
+        $response->addHeader('Cache-Control', 'post-check=' . (60 * $time - 10));
         /* // CACHE */
 	}, ["priority" => 1])
 
@@ -71,6 +71,8 @@ $injector->share($db);
         if(!endsWith($request->get('REQUEST_URI_PATH'), '.css')) {
             return;
         }
+
+        var_dump($response);
 
         require_once 'lib/CssMin.php';
 
@@ -102,7 +104,7 @@ $injector->share($db);
 
         $body = CssMin::minify($body, $filters, $plugins);
         var_dump($body);
-        
+
         $response->setBody($body);
         $cache->set($body);
 	})
