@@ -106,7 +106,10 @@ $injector->share($db);
         var_dump($body);
 
         $response->setBody($body);
-        $cache->set($body);
+
+        if($response->getStatus() === 200 && !empty($body)) {
+            $cache->set($body);
+        }
 	})
 
 	->run();
