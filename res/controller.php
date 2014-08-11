@@ -103,7 +103,11 @@ $injector->share($db);
         ];
 
         $body = $response->getBody();
+        var_dump($body);
+
         $body = CssMin::minify($body, $filters, $plugins);
+        var_dump($body);
+
         $response->setBody($body);
         $cache->set($body);
 	})
