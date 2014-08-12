@@ -13,3 +13,14 @@ function startsWith($haystack, $needle) {
 function endsWith($haystack, $needle) {
     return $needle === "" || substr($haystack, -strlen($needle)) === $needle;
 }
+
+function getWorldFromUrl($url) {
+	if(!preg_match("~http://(www\.)?(welt(\d+)|rpsrv|afsrv)\.(freewar|intercyloon)\.de/.*~", $url, $match)) {
+		return "";
+	}
+
+	if(!empty($match[3]))
+		return "de{$match[3]}";
+
+	return substr($match[2], 0, 2);
+}
