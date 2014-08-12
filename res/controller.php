@@ -113,7 +113,7 @@ $finished = false;
 
     ->route('GET', '/flatlight/v1/i/{name:[A-Za-z0-9_-]+}.{extension}', 'FlatLight\FlatLight::image')
 
-    ->route('GET', '/event/record', 'App\Event::addRecord');
+    ->route('GET', '/event/record', 'App\Event::addRecord')
     ->route('GET', '/flatlight/v1/event.css', 'FlatLight\FlatLight::event')
 
 	->after(function (Response $response) use ($injector, &$finished) {
