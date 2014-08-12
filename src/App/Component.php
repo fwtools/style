@@ -3,5 +3,5 @@
 namespace App;
 
 interface Component {
-	public function get ();
-} 
+	public function get ($world);
+}
