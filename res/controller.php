@@ -33,7 +33,7 @@ $injector->share($db);
         if(!endsWith($request['REQUEST_URI_PATH'], '.css')) {
             return;
         }
-        
+
         $response->setHeader('Content-Type', 'text/css; charset=utf-8');
 
         $components = new \App\Components(
@@ -58,20 +58,25 @@ $injector->share($db);
         /* // CACHE */
 	}, ["priority" => 1])
 
-	->before(function (Response $response, App\StyleCache $cache) {
-
-        if(isset($_GET['mat']) && is_string($_GET['mat'])) {
-            $track_id = md5($_GET['mat']);
-            print "@import 'track/track.php?{$track_id}';";
+	->before(function (Request $request, Response $response, App\StyleCache $cache) {
+        if($request->hasQueryParameter('mat')) {
+            $track_id = md5($request->getStringQueryParameter('mat'));
+            $response->setBody("@import 'track/track.php?{$track_id}';" . $response->getBody());
         }
 
-        $world = isset($_GET['world']) && is_string($_GET['world']) ? $_GET['world'] : '';
+        try {
+            $world = $request->getStringQueryParamter('world');
+            $worlds = [
+                'de1', 'de2', 'de3', 'de4', 'de5', 'de6', 'de7', 'de8', 'de9',
+                'de10', 'de11', 'de12', 'de13', 'de14', 'af', 'rp'
+            ];
 
-        if(!in_array($world, ['de1', 'de2', 'de3', 'de4', 'de5', 'de6', 'de7', 'de8', 'de9', 'de10', 'de11', 'de12', 'de13', 'de14'])) {
-            $world = "";
-        }
+            if(!in_array($world, $worlds)) {
+                throw new Exception('unknown world');
+            }
 
-        print "@import url('event/style.php?world={$world}');";
+            $response->setBody("@import '/event/style.css?world={$world}';" . $response->getBody());
+        } catch(\Exception $e) { }
 
 		if (($style = $cache->get()) !== false) {
 			$response->setBody($style);
