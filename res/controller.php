@@ -55,6 +55,8 @@ $injector->share($db);
         $response->setHeader('Last-Modified', $mod_gmt);
         $response->setHeader('Cache-Control', 'private, max-age=' . (60 * $time));
         $response->addHeader('Cache-Control', 'post-check=' . (60 * $time - 10));
+
+        $response->setBody($response->getBody() . $components->getAllStyles());
         /* // CACHE */
 	}, ["priority" => 1])
 
