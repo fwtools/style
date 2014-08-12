@@ -6,6 +6,12 @@ use \Arya\Request as Request;
 use \Arya\Response as Response;
 
 class Event {
+	private $db;
+	
+	public function __construct(\PDO $db) {
+		$this->db = $db;
+	}
+
 	public function addRecord(Request $request) {
 		try {
 			$event = $request->getStringQueryParameter('event');
