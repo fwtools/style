@@ -32,7 +32,7 @@ $finished = false;
 	})
 
 	->before(function (Request $request, Response $response) use ($injector, &$finished) {
-        if (!endsWith($request['REQUEST_URI_PATH'], '.css')) {
+        if (!endsWith($request['REQUEST_URI_PATH'], 'style.css')) {
             return false;
         }
 
