@@ -13,7 +13,7 @@ use Arya\Request,
 
 try {
 	$db = require 'database.php';
-} catch(Exception $e) {
+} catch (Exception $e) {
 	header("HTTP/1.1 500 Internal Server Error");
 	header("Status: 500 Internal Server Error");
 	exit;
@@ -22,6 +22,8 @@ try {
 $injector = new Auryn\Provider(new Auryn\ReflectionPool);
 $injector->share($db);
 
+$finished = false;
+
 (new \Arya\Application($injector))
     ->setOption('routing.cache_file', __DIR__ . '/../route.cache')
 
@@ -29,9 +31,9 @@ $injector->share($db);
 		return (new Response)->setHeader('Location', 'http://fwtools.de/style')->setStatus(301);
 	})
 
-	->before(function (Request $request, Response $response) use (&$injector) {
-        if(!endsWith($request['REQUEST_URI_PATH'], '.css')) {
-            return;
+	->before(function (Request $request, Response $response) use ($injector, &$finished) {
+        if (!endsWith($request['REQUEST_URI_PATH'], '.css')) {
+            return false;
         }
 
         $response->setHeader('Content-Type', 'text/css; charset=utf-8');
@@ -42,9 +44,10 @@ $injector->share($db);
                 array_map('strtolower', array_keys($request->getAllQueryParameters()))
             ), $injector
         );
+		$cache = new App\StyleCache($request['REQUEST_URI_PATH'], $components);
 
 		$injector->share($components);
-		$injector->share($cache = new App\StyleCache($request['REQUEST_URI_PATH'], $components));
+		$injector->share($cache);
 
         /* CACHE */
         $time = 240;
@@ -58,10 +61,8 @@ $injector->share($db);
 
         $response->setBody($response->getBody() . implode(iterator_to_array($components->getAllStyles())));
         /* // CACHE */
-	}, ["priority" => 1])
 
-	->before(function (Request $request, Response $response, App\StyleCache $cache) {
-        if($request->hasQueryParameter('mat')) {
+        if ($request->hasQueryParameter('mat')) {
             $track_id = md5($request->getStringQueryParameter('mat'));
             $response->setBody("@import 'track/track.php?{$track_id}';" . $response->getBody());
         }
@@ -78,10 +79,11 @@ $injector->share($db);
             }
 
             $response->setBody("@import '/event/style.css?world={$world}';" . $response->getBody());
-        } catch(\Exception $e) { }
+        } catch (\Exception $e) { }
 
 		if (($style = $cache->get()) !== false) {
-			$response->setBody($style);
+			$response->setBody($response->getBody() . $style);
+			$finished = true;
 			return true;
 		}
 	})
@@ -94,48 +96,56 @@ $injector->share($db);
 
     ->route('GET', '/flatlight/v1/i/{name:[A-Za-z0-9_-]+}.{extension}', 'FlatLight\FlatLight::image')
 
-	->after(function (Request $request, Response $response, App\StyleCache $cache) {
-        if(!$response->hasHeader('Content-Type'))
+	->after(function (Response $response) use ($injector, &$finished) {
+		if ($finished) {
+			return;
+		}
+
+        if (!$response->hasHeader('Content-Type') || !startsWith($response->getHeader('Content-Type'), 'text/css')) {
             return;
+		}
 
-        if(!startsWith($response->getHeader('Content-Type'), 'text/css'))
-            return;
+		$injector->execute(function (Response $response, App\StyleCache $cache) {
+			$body = $response->getBody();
+			$imports = [];
+			$body = preg_replace_callback('#(@import\s[^;]+;)#', function ($m) use (&$imports) {
+				$imports[] = $m[1];
+				return "";
+			}, $body);
+			$body = implode("", $imports) . $body;
 
-        if($cache->get() !== false)
-            return;
+			require_once 'lib/CssMin.php';
 
-        require_once 'lib/CssMin.php';
+			$filters = [
+				"ImportImports"                 => false,
+				"RemoveComments"                => true,
+				"RemoveEmptyRulesets"           => true,
+				"RemoveEmptyAtBlocks"           => true,
+				"ConvertLevel3AtKeyframes"      => false,
+				"ConvertLevel3Properties"       => true,
+				"Variables"                     => true,
+				"RemoveLastDelarationSemiColon" => true
+			];
 
-        $filters = [
-            "ImportImports"                 => false,
-            "RemoveComments"                => true,
-            "RemoveEmptyRulesets"           => true,
-            "RemoveEmptyAtBlocks"           => true,
-            "ConvertLevel3AtKeyframes"      => false,
-            "ConvertLevel3Properties"       => true,
-            "Variables"                     => true,
-            "RemoveLastDelarationSemiColon" => true
-        ];
+			$plugins = [
+				"Variables"                     => true,
+				"ConvertFontWeight"             => true,
+				"ConvertHslColors"              => true,
+				"ConvertRgbColors"              => true,
+				"ConvertNamedColors"            => true,
+				"CompressColorValues"           => true,
+				"CompressUnitValues"            => true,
+				"CompressExpressionValues"      => true
+			];
 
-        $plugins = [
-            "Variables"                     => true,
-            "ConvertFontWeight"             => true,
-            "ConvertHslColors"              => true,
-            "ConvertRgbColors"              => true,
-            "ConvertNamedColors"            => true,
-            "CompressColorValues"           => true,
-            "CompressUnitValues"            => true,
-            "CompressExpressionValues"      => true
-        ];
+			$body = CssMin::minify($body, $filters, $plugins);
 
-        $body = $response->getBody();
-        $body = CssMin::minify($body, $filters, $plugins);
+			$response->setBody($body);
 
-        $response->setBody($body);
-
-        if($response->getStatus() === 200 && !empty($body)) {
-            $cache->set($body);
-        }
+			if($response->getStatus() === 200 && !empty($body)) {
+				$cache->set($body);
+			}
+		});
 	})
 
 	->run();
