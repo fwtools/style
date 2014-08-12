@@ -38,7 +38,7 @@ $injector->share($db);
 
         $components = new \App\Components(
             array_intersect(
-				array_map(function ($item) { return substr(array_reverse(explode("/", $item))[0], 0, strrpos($item, ".") - strlen($item)); }, glob(__DIR__."/src/App/Component/*")),
+				array_map(function ($item) { return substr(array_reverse(explode("/", $item))[0], 0, strrpos($item, ".") - strlen($item)); }, glob(__DIR__."/../src/App/Component/*")),
                 array_map('strtolower', array_keys($request->getAllQueryParameters()))
             ), $injector
         );
