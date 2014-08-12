@@ -65,7 +65,7 @@ $injector->share($db);
         }
 
         try {
-            $world = $request->getStringQueryParamter('world');
+            $world = $request->getStringQueryParameter('world');
             $worlds = [
                 'de1', 'de2', 'de3', 'de4', 'de5', 'de6', 'de7', 'de8', 'de9',
                 'de10', 'de11', 'de12', 'de13', 'de14', 'af', 'rp'
