@@ -117,10 +117,14 @@ $finished = false;
     ->route('GET', '/event/record', 'App\Event::addRecord')
     ->route('GET', '/flatlight/v1/event.css', 'FlatLight\FlatLight::event')
 
-	->after(function (Response $response) use ($injector, &$finished) {
+	->after(function (Request $request, Response $response) use ($injector, &$finished) {
 		if (!$response->hasHeader('Content-Type') || !startsWith($response->getHeader('Content-Type'), 'text/css')) {
 			return;
 		}
+
+        if (!endsWith($request['REQUEST_URI_PATH'], 'style.css')) {
+            return;
+        }
 
 		$body = $response->getBody();
 
