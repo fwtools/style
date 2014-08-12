@@ -99,6 +99,9 @@ $injector->share($db);
         if(!startsWith($response->getHeader('Content-Type'), 'text/css'))
             return;
 
+        if($cache->get() !== false)
+            return;
+
         require_once 'lib/CssMin.php';
 
         $filters = [
