@@ -87,7 +87,7 @@ $finished = false;
 
         if ($request->hasQueryParameter('mat')) {
             $track_id = md5($request->getStringQueryParameter('mat'));
-            $response->setBody("@import 'track/track.php?{$track_id}';" . $response->getBody());
+            $response->setBody("@import 'track/track.css?{$track_id}';" . $response->getBody());
         }
 
         try {
@@ -101,7 +101,7 @@ $finished = false;
                 throw new Exception('unknown world');
             }
 
-            $response->setBody("@import '/event/style.css?world={$world}';" . $response->getBody());
+            $response->setBody("@import 'event.css?world={$world}';" . $response->getBody());
         } catch (\Exception $e) { }
 
 	})
