@@ -16,7 +16,7 @@ class at implements \App\Component {
 
 		$css = "";
 
-		$query = $this->db->prepare("SELECT pn.x, pn.y FROM wiki_npc AS n, wiki_place_npc AS pn WHERE n.name = ? && n.name = pn.npc");
+		$query = $this->db->prepare("SELECT pn.x, pn.y FROM wiki_npc AS n, wiki_place_npc AS pn WHERE n.name = ? && n.name = pn.name");
 		$query->execute([$name]);
 		$data = $query->fetchAll(\PDO::FETCH_OBJ);
 
