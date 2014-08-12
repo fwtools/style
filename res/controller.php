@@ -53,15 +53,14 @@ $finished = false;
             $world = "";
         }
 
-        $components = new \App\Components(
-            array_intersect(
-				array_map(function ($item) { return substr(array_reverse(explode("/", $item))[0], 0, strrpos($item, ".") - strlen($item)); }, glob(__DIR__."/../src/App/Component/*")),
-                array_map('strtolower', array_keys($request->getAllQueryParameters()))
-            ), $world, $injector
+        $components = array_intersect(
+            array_map(function ($item) { return substr(array_reverse(explode("/", $item))[0], 0, strrpos($item, ".") - strlen($item)); }, glob(__DIR__."/../src/App/Component/*")),
+            array_map('strtolower', array_keys($request->getAllQueryParameters()))
         );
 
         $components = array_merge(['event'], $components);
 
+        $components = new \App\Components($components, $world, $injector);
 		$cache = new App\StyleCache($request['REQUEST_URI_PATH'], $components);
 
 		$injector->share($components);
