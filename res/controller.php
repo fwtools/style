@@ -62,6 +62,12 @@ $finished = false;
         $response->setBody($response->getBody() . implode(iterator_to_array($components->getAllStyles())));
         /* // CACHE */
 
+		if (($style = $cache->get()) !== false) {
+			$response->setBody($response->getBody() . $style);
+			$finished = true;
+			return true;
+		}
+
         if ($request->hasQueryParameter('mat')) {
             $track_id = md5($request->getStringQueryParameter('mat'));
             $response->setBody("@import 'track/track.php?{$track_id}';" . $response->getBody());
@@ -81,11 +87,6 @@ $finished = false;
             $response->setBody("@import '/event/style.css?world={$world}';" . $response->getBody());
         } catch (\Exception $e) { }
 
-		if (($style = $cache->get()) !== false) {
-			$response->setBody($response->getBody() . $style);
-			$finished = true;
-			return true;
-		}
 	})
 
 	->route('GET', '/bettersunfire/v1/style.css', 'BetterSunfire\BetterSunfire::main')
@@ -97,22 +98,26 @@ $finished = false;
     ->route('GET', '/flatlight/v1/i/{name:[A-Za-z0-9_-]+}.{extension}', 'FlatLight\FlatLight::image')
 
 	->after(function (Response $response) use ($injector, &$finished) {
+		if (!$response->hasHeader('Content-Type') || !startsWith($response->getHeader('Content-Type'), 'text/css')) {
+			return;
+		}
+
+		$body = $response->getBody();
+
+		$imports = [];
+		$body = preg_replace_callback('#(@import\s[^;]+;)#', function ($m) use (&$imports) {
+			$imports[] = $m[1];
+			return "";
+		}, $body);
+		$body = implode($imports) . $body;
+
+		$response->setBody($body);
 		if ($finished) {
 			return;
 		}
 
-        if (!$response->hasHeader('Content-Type') || !startsWith($response->getHeader('Content-Type'), 'text/css')) {
-            return;
-		}
-
 		$injector->execute(function (Response $response, App\StyleCache $cache) {
 			$body = $response->getBody();
-			$imports = [];
-			$body = preg_replace_callback('#(@import\s[^;]+;)#', function ($m) use (&$imports) {
-				$imports[] = $m[1];
-				return "";
-			}, $body);
-			$body = implode("", $imports) . $body;
 
 			require_once 'lib/CssMin.php';
 
