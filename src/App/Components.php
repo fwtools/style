@@ -16,7 +16,7 @@ class Components {
 	}
 
 	public function getStyle ($component) {
-		return $this->injector->make("App/Components/$component")->get();
+		return $this->injector->make("App/Component/$component")->get();
 	}
 
 	public function getAllStyles () {
