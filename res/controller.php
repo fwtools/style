@@ -60,6 +60,8 @@ $finished = false;
             ), $world, $injector
         );
 
+        $components = array_merge(['event'], $components);
+
 		$cache = new App\StyleCache($request['REQUEST_URI_PATH'], $components);
 
 		$injector->share($components);
