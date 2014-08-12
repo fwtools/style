@@ -38,12 +38,28 @@ $finished = false;
 
         $response->setHeader('Content-Type', 'text/css; charset=utf-8');
 
+        try {
+            $world = $request->getStringQueryParameter('world');
+
+            $worlds = [
+                'de1', 'de2', 'de3', 'de4', 'de5', 'de6', 'de7', 'de8', 'de9',
+                'de10', 'de11', 'de12', 'de13', 'de14', 'af', 'rp'
+            ];
+
+            if(!in_array($world, $worlds)) {
+                throw new Exception('unknown world');
+            }
+        } catch(\Exception $e) {
+            $world = "";
+        }
+
         $components = new \App\Components(
             array_intersect(
 				array_map(function ($item) { return substr(array_reverse(explode("/", $item))[0], 0, strrpos($item, ".") - strlen($item)); }, glob(__DIR__."/../src/App/Component/*")),
                 array_map('strtolower', array_keys($request->getAllQueryParameters()))
-            ), $injector
+            ), $world, $injector
         );
+
 		$cache = new App\StyleCache($request['REQUEST_URI_PATH'], $components);
 
 		$injector->share($components);
@@ -96,6 +112,9 @@ $finished = false;
 	->route('GET', '/kstyle/v1/style.css', 'KStyle\KStyle::main')
 
     ->route('GET', '/flatlight/v1/i/{name:[A-Za-z0-9_-]+}.{extension}', 'FlatLight\FlatLight::image')
+
+    ->route('GET', '/event/record', 'App\Event::addRecord');
+    ->route('GET', '/flatlight/v1/event.css', 'FlatLight\FlatLight::event')
 
 	->after(function (Response $response) use ($injector, &$finished) {
 		if (!$response->hasHeader('Content-Type') || !startsWith($response->getHeader('Content-Type'), 'text/css')) {

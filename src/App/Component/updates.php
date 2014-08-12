@@ -9,7 +9,7 @@ class updates implements \App\Component {
 		$this->db = $db;
 	}
 
-	public function get () {
+	public function get ($world) {
 		$q = $this->db->query("SELECT title FROM fw_news LIMIT 3");
 		$data = $q->fetchAll(\PDO::FETCH_OBJ);
 

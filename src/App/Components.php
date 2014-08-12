@@ -4,10 +4,12 @@ namespace App;
 
 class Components {
 	private $components;
+	private $world;
 	private $injector;
 
-	public function __construct (array $components, \Auryn\Injector $injector) {
+	public function __construct (array $components, $world, \Auryn\Injector $injector) {
 		$this->components = $components;
+		$this->world = $world;
 		$this->injector = $injector;
 	}
 
@@ -16,7 +18,7 @@ class Components {
 	}
 
 	public function getStyle ($component) {
-		return $this->injector->make("App\\Component\\$component")->get();
+		return $this->injector->make("App\\Component\\$component")->get($this->world);
 	}
 
 	public function getAllStyles () {
