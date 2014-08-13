@@ -16,7 +16,7 @@ class Track {
 		$response = new Response;
 
 		$query = $this->db->prepare("SELECT x, y FROM style_track WHERE id = ? ORDER BY time DESC LIMIT 1");
-		$query->execute([$id]);
+		$query->execute([md5($id)]);
 		$data = $query->fetch(\PDO::FETCH_OBJ);
 
 		if(!$query->rowCount() || $x != $data->x || $y != $data->y) {
