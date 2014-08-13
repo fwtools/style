@@ -40,7 +40,7 @@ class Track {
 		$time = 240;
 
 		$exp_gmt = gmdate("D, d M Y H:i:s", time() + $time * 60) . " GMT";
-		$mod_gmt = gmdate("D, d M Y H:i:s", $cache->getTime()) . " GMT";
+		$mod_gmt = gmdate("D, d M Y H:i:s", time()) . " GMT";
 
 		$response->setHeader('Expires', $exp_gmt);
 		$response->setHeader('Last-Modified', $mod_gmt);
