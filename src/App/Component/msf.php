@@ -9,7 +9,7 @@ class msf implements \App\Component {
 		$this->db = $db;
 	}
 
-	public function get ($world) {
+	public function get () {
 		$q = $this->db->query("SELECT x, y FROM wiki_place WHERE secure = 1");
 		$data = $q->fetchAll(\PDO::FETCH_OBJ);
 		$selectors = [];

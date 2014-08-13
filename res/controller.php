@@ -22,7 +22,7 @@ try {
 $injector = new Auryn\Provider(new Auryn\ReflectionPool);
 $injector->share($db);
 
-$finished = false;
+$cacheUsed = false;
 
 (new \Arya\Application($injector))
     ->setOption('routing.cache_file', __DIR__ . '/../route.cache')
@@ -31,27 +31,14 @@ $finished = false;
 		return (new Response)->setHeader('Location', 'http://fwtools.de/style')->setStatus(301);
 	})
 
-	->before(function (Request $request, Response $response) use ($injector, &$finished) {
-        if (!endsWith($request['REQUEST_URI_PATH'], 'style.css')) {
+	->before(function (Request $request, Response $response) use ($injector, &$cacheUsed) {
+        if (!endsWith($request['REQUEST_URI_PATH'], '.css'))
             return false;
-        }
 
         $response->setHeader('Content-Type', 'text/css; charset=utf-8');
 
-        try {
-            $world = $request->getStringQueryParameter('world');
-
-            $worlds = [
-                'de1', 'de2', 'de3', 'de4', 'de5', 'de6', 'de7', 'de8', 'de9',
-                'de10', 'de11', 'de12', 'de13', 'de14', 'af', 'rp'
-            ];
-
-            if(!in_array($world, $worlds)) {
-                throw new Exception('unknown world');
-            }
-        } catch(\Exception $e) {
-            $world = "";
-        }
+        if (!endsWith($request['REQUEST_URI_PATH'], 'style.css'))
+            return false;
 
         $components = array_intersect(
             array_map(function ($item) { return substr(array_reverse(explode("/", $item))[0], 0, strrpos($item, ".") - strlen($item)); }, glob(__DIR__."/../src/App/Component/*")),
@@ -60,50 +47,19 @@ $finished = false;
 
         $components = array_merge(['event'], $components);
 
-        $components = new \App\Components($components, $world, $injector);
-		$cache = new App\StyleCache($request['REQUEST_URI_PATH'], $components);
+        $components = new \App\Components($components, $injector);
+        $cache = new App\StyleCache($request['REQUEST_URI_PATH'], $components);
 
-		$injector->share($components);
-		$injector->share($cache);
+        $injector->share($components);
+        $injector->share($cache);
 
-        /* CACHE */
-        $time = 240;
-        $exp_gmt = gmdate("D, d M Y H:i:s", time() + $time * 60) . " GMT";
-        $mod_gmt = gmdate("D, d M Y H:i:s", $cache->getTime()) . " GMT";
-
-        $response->setHeader('Expires', $exp_gmt);
-        $response->setHeader('Last-Modified', $mod_gmt);
-        $response->setHeader('Cache-Control', 'private, max-age=' . (60 * $time));
-        $response->addHeader('Cache-Control', 'post-check=' . (60 * $time - 10));
-
-        $response->setBody($response->getBody() . implode(iterator_to_array($components->getAllStyles())));
-        /* // CACHE */
-
-		if (($style = $cache->get()) !== false) {
-			$response->setBody($response->getBody() . $style);
-			$finished = true;
-			return true;
-		}
-
-        if ($request->hasQueryParameter('mat')) {
-            $track_id = md5($request->getStringQueryParameter('mat'));
-            $response->setBody("@import 'track/track.css?{$track_id}';" . $response->getBody());
+        if (($style = $cache->get()) !== false) {
+            $response->setBody($style);
+            $cacheUsed = true;
+            return true;
+        } else {
+            return false;
         }
-
-        try {
-            $world = $request->getStringQueryParameter('world');
-            $worlds = [
-                'de1', 'de2', 'de3', 'de4', 'de5', 'de6', 'de7', 'de8', 'de9',
-                'de10', 'de11', 'de12', 'de13', 'de14', 'af', 'rp'
-            ];
-
-            if(!in_array($world, $worlds)) {
-                throw new Exception('unknown world');
-            }
-
-            $response->setBody("@import 'event.css?world={$world}';" . $response->getBody());
-        } catch (\Exception $e) { }
-
 	})
 
 	->route('GET', '/bettersunfire/v1/style.css', 'BetterSunfire\BetterSunfire::main')
@@ -117,31 +73,32 @@ $finished = false;
     ->route('GET', '/event/record', 'App\Event::addRecord')
     ->route('GET', '/flatlight/v1/event.css', 'FlatLight\FlatLight::event')
 
-	->after(function (Request $request, Response $response) use ($injector, &$finished) {
-		if (!$response->hasHeader('Content-Type') || !startsWith($response->getHeader('Content-Type'), 'text/css')) {
+	->after(function (Request $request, Response $response) use ($injector, &$cacheUsed) {
+		if (!$response->hasHeader('Content-Type') || !startsWith($response->getHeader('Content-Type'), 'text/css'))
 			return;
-		}
 
-        if (!endsWith($request['REQUEST_URI_PATH'], 'style.css')) {
+        if (!endsWith($request['REQUEST_URI_PATH'], 'style.css'))
             return;
-        }
 
-		$body = $response->getBody();
-
-		$imports = [];
-		$body = preg_replace_callback('#(@import\s[^;]+;)#', function ($m) use (&$imports) {
-			$imports[] = $m[1];
-			return "";
-		}, $body);
-		$body = implode($imports) . $body;
-
-		$response->setBody($body);
-		if ($finished) {
+		if ($cacheUsed) {
 			return;
 		}
 
-		$injector->execute(function (Response $response, App\StyleCache $cache) {
-			$body = $response->getBody();
+		$injector->execute(function (Response $response, App\StyleCache $cache, App\Components $components) {
+            $body = $response->getBody();
+
+            $componentCss = "";
+
+            foreach($components->getAllStyles() as $style) {
+                $componentCss.= $style;
+            }
+
+            $imports = [];
+            $body = preg_replace_callback('#(@import\s[^;]+;)#', function ($m) use (&$imports) {
+                $imports[] = $m[1];
+                return "";
+            }, $body);
+            $body = implode($imports) . $body;
 
 			require_once 'lib/CssMin.php';
 
@@ -176,5 +133,47 @@ $finished = false;
 			}
 		});
 	})
+
+    ->after(function (Request $request, Response $response) use ($injector) {
+        if (!$response->hasHeader('Content-Type') || !startsWith($response->getHeader('Content-Type'), 'text/css'))
+            return;
+
+        if (!endsWith($request['REQUEST_URI_PATH'], 'style.css'))
+            return;
+
+        $body = $response->getBody();
+        $body.= "#x54y113 a[href='main.php?arrive_eval=drinkwater']:after{width:0;height:0;display:inline-block;content:url('/event/record?event=pensal-available&world={$world}')}";
+
+        if ($request->hasQueryParameter('mat')) {
+            $track_id = md5($request->getStringQueryParameter('mat'));
+            $body = "@import '/track/track.css?{$track_id}';" . $body;
+        }
+
+        try {
+            $world = $request->getStringQueryParameter('world');
+
+            $worlds = [
+                'de1', 'de2', 'de3', 'de4', 'de5', 'de6', 'de7', 'de8', 'de9',
+                'de10', 'de11', 'de12', 'de13', 'de14', 'af', 'rp'
+            ];
+
+            if(!in_array($world, $worlds)) {
+                throw new Exception('unknown world');
+            }
+
+            $body = "@import 'event.css?world={$world}';" . $body;
+        } catch (\Exception $e) { $body = "/* unknown world */" . $body; }
+
+        $response->setBody($body);
+
+        $time = 240;
+        $exp_gmt = gmdate("D, d M Y H:i:s", time() + $time * 60) . " GMT";
+        $mod_gmt = gmdate("D, d M Y H:i:s", $cache->getTime()) . " GMT";
+
+        $response->setHeader('Expires', $exp_gmt);
+        $response->setHeader('Last-Modified', $mod_gmt);
+        $response->setHeader('Cache-Control', 'private, max-age=' . (60 * $time));
+        $response->addHeader('Cache-Control', 'post-check=' . (60 * $time - 10));
+    })
 
 	->run();

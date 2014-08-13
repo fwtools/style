@@ -27,7 +27,7 @@ class at implements \App\Component {
 		return $css;
 	}
 
-	public function get ($world) {
+	public function get () {
 		$css = $this->getSingleNpcStyle('Onlo-Skelett', 'Onlo');
 		$css.= $this->getSingleNpcStyle('Ektofron');
 		$css.= $this->getSingleNpcStyle('Blattalisk');

@@ -9,7 +9,7 @@ class agg implements \App\Component {
 		$this->db = $db;
 	}
 
-	public function get ($world) {
+	public function get () {
 		$q = $this->db->query("SELECT n.attack, pn.x, pn.y FROM wiki_npc AS n, wiki_place_npc AS pn WHERE n.aggressive = 1 && n.name = pn.name && pn.x < 0 && pn.y < 0 ORDER BY n.attack");
 		$data = $q->fetchAll(\PDO::FETCH_OBJ);
 
