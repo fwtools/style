@@ -111,7 +111,7 @@ $cacheUsed = false;
             $body = preg_replace_callback('#(@import\s[^;]+;)#', function ($m) use (&$imports) {
                 $imports[] = $m[1];
                 return "";
-            }, $body);
+            }, $body . $componentCss);
             $body = implode($imports) . $body;
 
 			require_once 'lib/CssMin.php';
