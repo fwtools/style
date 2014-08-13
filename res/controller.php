@@ -70,7 +70,8 @@ $cacheUsed = false;
 
     ->route('GET', '/track/record/{id}/{x}/{y}', 'App\Track::addRecord')
     ->route('GET', '/track.css', 'App\Track::css')
-    ->route('GET', '/track/map/{id:.+}', 'App\Track::map')
+    ->route('GET', '/track/map/{id:.+}', 'App\Track::singleUserMap')
+    ->route('GET', '/track/map', 'App\Track::multiUserMap')
 
     ->route('GET', '/event/record', 'App\Event::addRecord')
     ->route('GET', '/flatlight/v1/event.css', 'FlatLight\FlatLight::event')

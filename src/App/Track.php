@@ -70,9 +70,17 @@ class Track {
 		return $response->setBody($css);
 	}
 
-	public function map(Request $request, $id) {
+	public function singleUserMap(Request $request, $id) {
 		$id = md5(md5(md5($id)));
 
+		return $this->map($request, $id);
+	}
+
+	public function multiUserMap(Request $request) {
+		return $this->map($request);
+	}
+
+	private function map(Request $request, $id = null) {
 		$q = $this->db->query("SELECT x, y, secure FROM wiki_place WHERE x > 0 && y > 0 && x < 150 && y < 130");
 		$data = $q->fetchAll(\PDO::FETCH_OBJ);
 
@@ -83,11 +91,15 @@ class Track {
 
 		$place = [];
 
-		$query = $this->db->prepare("SELECT x, y, COUNT(1) as cnt FROM style_track WHERE id = ? GROUP BY x, y");
-		$query->execute([$id]);
+		if(isset($id)) {
+			$q = $this->db->prepare("SELECT x, y, COUNT(1) as cnt FROM style_track WHERE id = ? GROUP BY x, y");
+			$q->execute([$id]);
+		} else {
+			$q = $this->db->query("SELECT x, y, COUNT(1) as cnt FROM style_track GROUP BY x, y");
+		}
 
 		$maxCnt = 1;
-		$data = $query->fetchAll(\PDO::FETCH_OBJ);
+		$data = $q->fetchAll(\PDO::FETCH_OBJ);
 
 		foreach($data as $row) {
 			$place[$row->x][$row->y] = $row->cnt;
