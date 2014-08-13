@@ -101,17 +101,15 @@ $cacheUsed = false;
 		$injector->execute(function (Response $response, App\StyleCache $cache, App\Components $components) {
             $body = $response->getBody();
 
-            $componentCss = "";
-
             foreach($components->getAllStyles() as $style) {
-                $componentCss.= $style;
+                $body.= $style;
             }
 
             $imports = [];
             $body = preg_replace_callback('#(@import\s[^;]+;)#', function ($m) use (&$imports) {
                 $imports[] = $m[1];
                 return "";
-            }, $body . $componentCss);
+            }, $body);
             $body = implode($imports) . $body;
 
 			require_once 'lib/CssMin.php';
