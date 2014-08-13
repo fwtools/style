@@ -97,6 +97,9 @@ class Track {
 			}
 		}
 
+		var_dump($place);
+		var_dump($maxCnt);
+
 		$q = $this->db->query("SELECT min(x) AS min_x, min(y) AS min_y, max(x) AS max_x, max(y) AS max_y FROM wiki_place WHERE x > 0 && y > 0 && x < 150 && y < 130");
 		$data = $q->fetchAll(\PDO::FETCH_OBJ);
 
