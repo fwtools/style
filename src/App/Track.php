@@ -113,7 +113,7 @@ class Track {
 					if(!isset($place[$x][$y]))
 						$place[$x][$y] = 0;
 
-					$white = ImageColorAllocateAlpha($map, 0, 0, 0, (int) min((127 * (($place[$x][$y]/$max) * .9 + .1)), 127));
+					$white = ImageColorAllocateAlpha($map, 0, 0, 0, (int) min((127 * (($place[$x][$y]/$maxCnt) * .9 + .1)), 127));
 					ImageFilledRectangle($map, ($x-$min_x+2) * 10, ($y-$min_y+2) * 10, ($x-$min_x+3) * 10 - 1, ($y-$min_y+3) * 10 - 1, $white);
 				}
 			}
