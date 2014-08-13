@@ -175,6 +175,6 @@ $cacheUsed = false;
         }
 
         $response->setBody($body);
-    })
+    }, ['priority' => 100])
 
 	->run();
