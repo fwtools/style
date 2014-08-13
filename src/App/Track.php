@@ -102,6 +102,9 @@ class Track {
 		$data = $q->fetchAll(\PDO::FETCH_OBJ);
 
 		foreach($data as $row) {
+			if(!isset($secure[$row->x][$row->y]))
+				continue;
+			
 			$place[$row->x][$row->y] = $row->cnt;
 
 			if($secure[$row->x][$row->y] == 0 && $place[$row->x][$row->y] > $maxCnt) {
