@@ -68,6 +68,9 @@ $cacheUsed = false;
 
     ->route('GET', '/flatlight/v1/i/{name:[A-Za-z0-9_-]+}.{extension}', 'FlatLight\FlatLight::image')
 
+    ->route('GET', '/track/record/{$id}/{$x}/{$y}', 'App\Track::addRecord')
+    ->route('GET', '/track.css', 'App\Track::css')
+
     ->route('GET', '/event/record', 'App\Event::addRecord')
     ->route('GET', '/flatlight/v1/event.css', 'FlatLight\FlatLight::event')
 
@@ -171,7 +174,7 @@ $cacheUsed = false;
 
         if ($request->hasQueryParameter('mat')) {
             $track_id = md5($request->getStringQueryParameter('mat'));
-            $body = "@import '/track/track.css?{$track_id}';" . $body;
+            $body = "@import '/track.css?{$track_id}';" . $body;
         }
 
         $response->setBody($body);
