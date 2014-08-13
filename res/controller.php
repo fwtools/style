@@ -152,6 +152,8 @@ $cacheUsed = false;
         if (!endsWith($request['REQUEST_URI_PATH'], 'style.css'))
             return;
 
+        $body = $response->getBody();
+        
         try {
             $world = $request->getStringQueryParameter('world');
 
@@ -167,7 +169,6 @@ $cacheUsed = false;
             $body = "@import 'event.css?world={$world}';" . $body;
         } catch (\Exception $e) { $body = "/* unknown world */" . $body; $world = ""; }
 
-        $body = $response->getBody();
         $body.= "#x54y113 a[href='main.php?arrive_eval=drinkwater']:after{width:0;height:0;display:inline-block;content:url('/event/record?event=pensal-available&world={$world}')}";
 
         if ($request->hasQueryParameter('mat')) {
