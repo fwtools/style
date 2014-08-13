@@ -45,8 +45,6 @@ $cacheUsed = false;
             array_map('strtolower', array_keys($request->getAllQueryParameters()))
         );
 
-        $components = array_merge(['event'], $components);
-
         $components = new \App\Components($components, $injector);
         $cache = new App\StyleCache($request['REQUEST_URI_PATH'], $components);
 
@@ -153,7 +151,7 @@ $cacheUsed = false;
             return;
 
         $body = $response->getBody();
-        
+
         try {
             $world = $request->getStringQueryParameter('world');
 
