@@ -13,12 +13,12 @@ class Track {
 	}
 
 	public function addRecord(Request $request, $id, $x, $y) {
-		$query = $db->prepare("SELECT x, y FROM style_track WHERE id = ? ORDER BY time DESC LIMIT 1");
+		$query = $this->db->prepare("SELECT x, y FROM style_track WHERE id = ? ORDER BY time DESC LIMIT 1");
 		$query->execute([$id]);
 		$data = $query->fetch(\PDO::FETCH_OBJ);
 
 		if(!$query->rowCount() || $x != $data->x || $y != $data->y) {
-			$query = $db->prepare("INSERT INTO style_track (id, x, y, time) VALUES(?, ?, ?, NOW())");
+			$query = $this->db->prepare("INSERT INTO style_track (id, x, y, time) VALUES(?, ?, ?, NOW())");
 			$query->execute([$id, $x, $y]);
 		}
 
@@ -53,7 +53,7 @@ class Track {
 			return $response->setBody(file_get_contents(__DIR__ . "/../../gen/track_{$hash}.css"));
 		}
 
-		$q = $db->query("SELECT x, y FROM wiki_place WHERE x > 0 && y > 0");
+		$q = $this->db->query("SELECT x, y FROM wiki_place WHERE x > 0 && y > 0");
 		$data = $q->fetchAll(\PDO::FETCH_OBJ);
 		$css = "";
 
