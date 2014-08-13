@@ -47,7 +47,7 @@ class Track {
 		$response->setHeader('Cache-Control', 'private, max-age=' . (60 * $time));
 		$response->addHeader('Cache-Control', 'post-check=' . (60 * $time - 10));
 
-		$hash = md5($_SERVER['QUERY_STRING']);
+		$hash = md5($request['QUERY_STRING']);
 
 		if(file_exists(__DIR__ . "/../../gen/track_{$hash}.css")) {
 			return $response->setBody(file_get_contents(__DIR__ . "/../../gen/track_{$hash}.css"));
