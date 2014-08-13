@@ -80,6 +80,17 @@ $cacheUsed = false;
         if (!endsWith($request['REQUEST_URI_PATH'], 'style.css'))
             return;
 
+        $injector->execute(function(Response $response, App\StyleCache $cache) {
+            $time = 240;
+            $exp_gmt = gmdate("D, d M Y H:i:s", time() + $time * 60) . " GMT";
+            $mod_gmt = gmdate("D, d M Y H:i:s", $cache->getTime()) . " GMT";
+
+            $response->setHeader('Expires', $exp_gmt);
+            $response->setHeader('Last-Modified', $mod_gmt);
+            $response->setHeader('Cache-Control', 'private, max-age=' . (60 * $time));
+            $response->addHeader('Cache-Control', 'post-check=' . (60 * $time - 10));
+        });
+
 		if ($cacheUsed) {
 			return;
 		}
@@ -141,14 +152,6 @@ $cacheUsed = false;
         if (!endsWith($request['REQUEST_URI_PATH'], 'style.css'))
             return;
 
-        $body = $response->getBody();
-        $body.= "#x54y113 a[href='main.php?arrive_eval=drinkwater']:after{width:0;height:0;display:inline-block;content:url('/event/record?event=pensal-available&world={$world}')}";
-
-        if ($request->hasQueryParameter('mat')) {
-            $track_id = md5($request->getStringQueryParameter('mat'));
-            $body = "@import '/track/track.css?{$track_id}';" . $body;
-        }
-
         try {
             $world = $request->getStringQueryParameter('world');
 
@@ -162,18 +165,17 @@ $cacheUsed = false;
             }
 
             $body = "@import 'event.css?world={$world}';" . $body;
-        } catch (\Exception $e) { $body = "/* unknown world */" . $body; }
+        } catch (\Exception $e) { $body = "/* unknown world */" . $body; $world = ""; }
+
+        $body = $response->getBody();
+        $body.= "#x54y113 a[href='main.php?arrive_eval=drinkwater']:after{width:0;height:0;display:inline-block;content:url('/event/record?event=pensal-available&world={$world}')}";
+
+        if ($request->hasQueryParameter('mat')) {
+            $track_id = md5($request->getStringQueryParameter('mat'));
+            $body = "@import '/track/track.css?{$track_id}';" . $body;
+        }
 
         $response->setBody($body);
-
-        $time = 240;
-        $exp_gmt = gmdate("D, d M Y H:i:s", time() + $time * 60) . " GMT";
-        $mod_gmt = gmdate("D, d M Y H:i:s", $cache->getTime()) . " GMT";
-
-        $response->setHeader('Expires', $exp_gmt);
-        $response->setHeader('Last-Modified', $mod_gmt);
-        $response->setHeader('Cache-Control', 'private, max-age=' . (60 * $time));
-        $response->addHeader('Cache-Control', 'post-check=' . (60 * $time - 10));
     })
 
 	->run();
