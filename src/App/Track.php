@@ -99,13 +99,13 @@ class Track {
 			}
 
 			else if($row->area === 'Itolos') {
-				$row->x -= 113;
+				$row->x -= 116;
 				$row->y -= 5;
 			}
 
 			else if($row->area === 'Düsterfrostinsel') {
 				$row->x -= 652;
-				$row->y -= 724;
+				$row->y -= 725;
 			}
 
 			else if($row->area === 'Belpharia - Die Hauptinsel' || $row->area === 'Belpharia - Die Westinsel' || $row->area === 'Belpharia - Die Ostinsel') {
