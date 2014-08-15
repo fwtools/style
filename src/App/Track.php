@@ -151,8 +151,8 @@ class Track {
 
 		$map = ImageCreateFromPNG(__DIR__ . '/../../assets/freewar/map.png');
 
-		for($x = $min_x - 1; $x <= $max_x + 1; $x++) {
-			for($y = $min_y - 1; $y <= $max_y + 1; $y++) {
+		for($x = $mapinfo['x.min'] - 1; $x <= $mapinfo['x.max'] + 1; $x++) {
+			for($y = $mapinfo['y.min'] - 1; $y <= $mapinfo['y.max'] + 1; $y++) {
 				if(isset($secure[$x][$y])) {
 					if(!isset($place[$x][$y]))
 						$place[$x][$y] = 0;
