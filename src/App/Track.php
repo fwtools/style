@@ -129,16 +129,41 @@ class Track {
 		$place = [];
 
 		if(isset($id)) {
-			$q = $this->db->prepare("SELECT x, y, COUNT(1) as cnt FROM style_track WHERE id = ? GROUP BY x, y");
+			$q = $this->db->prepare("SELECT p.area, s.x, s.y, COUNT(1) as cnt FROM style_track s, wiki_place p WHERE s.x = p.x && s.y = p.y && s.id = ? GROUP BY x, y");
 			$q->execute([$id]);
 		} else {
-			$q = $this->db->query("SELECT x, y, COUNT(1) as cnt FROM style_track GROUP BY x, y");
+			$q = $this->db->query("SELECT p.area, s.x, s.y, COUNT(1) as cnt FROM style_track s, wiki_place p WHERE s.x = p.x && s.y = p.y GROUP BY x, y");
 		}
 
 		$maxCnt = 1;
 		$data = $q->fetchAll(\PDO::FETCH_OBJ);
 
 		foreach($data as $row) {
+			if($row->area === 'Narubia') {
+				$row->x -= 365;
+				$row->y += 25;
+			}
+
+			else if($row->area === 'Itolos') {
+				$row->x -= 116;
+				$row->y -= 5;
+			}
+
+			else if($row->area === 'Düsterfrostinsel') {
+				$row->x -= 652;
+				$row->y -= 725;
+			}
+
+			else if($row->area === 'Belpharia - Die Hauptinsel' || $row->area === 'Belpharia - Die Westinsel' || $row->area === 'Belpharia - Die Ostinsel') {
+				$row->x -= 54;
+				$row->y -= 31;
+			}
+
+			else if($row->area === 'Gefrorene Insel') {
+				$row->x -= 858;
+				$row->y -= 890;
+			}
+
 			if(!isset($secure[$row->x][$row->y]))
 				continue;
 
