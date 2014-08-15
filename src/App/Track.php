@@ -81,7 +81,7 @@ class Track {
 	}
 
 	private function map(Request $request, $id = null) {
-		$q = $this->db->query("SELECT x, y, secure FROM wiki_place WHERE x > 0 && y > 0");
+		$q = $this->db->query("SELECT area, x, y, secure FROM wiki_place WHERE x > 0 && y > 0");
 		$data = $q->fetchAll(\PDO::FETCH_OBJ);
 
 		$secure = [];
