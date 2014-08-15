@@ -81,11 +81,48 @@ class Track {
 	}
 
 	private function map(Request $request, $id = null) {
-		$q = $this->db->query("SELECT x, y, secure FROM wiki_place WHERE x > 0 && y > 0 && x < 150 && y < 130");
+		$q = $this->db->query("SELECT x, y, secure FROM wiki_place WHERE x > 0 && y > 0");
 		$data = $q->fetchAll(\PDO::FETCH_OBJ);
 
 		$secure = [];
+		$mapinfo = [
+			'x.min' => PHP_INT_MAX,
+			'x.max' => 0,
+			'y.min' => PHP_INT_MAX,
+			'y.max' => 0,
+		];
+
 		foreach($data as $row) {
+			if($row->area === 'Narubia') {
+				$row->x -= 365;
+				$row->y += 25;
+			}
+
+			else if($row->area === 'Itolos') {
+				$row->x -= 120;
+				$row->y -= 1;
+			}
+
+			else if($row->area === 'Düsterfrostinsel') {
+				$row->x -= 656;
+				$row->y -= 717;
+			}
+
+			else if($row->area === 'Belpharia - Die Hauptinsel' || $row->area === 'Belpharia - Die Westinsel' || $row->area === 'Belpharia - Die Ostinsel') {
+				$row->x -= 54;
+				$row->y -= 30;
+			}
+
+			else if($row->area === 'Gefrorene Insel') {
+				$row->x -= 859;
+				$row->y -= 890;
+			}
+
+			$mapinfo['x.min'] = min($mapinfo['x.min'], $row->x);
+			$mapinfo['x.max'] = max($mapinfo['x.max'], $row->x);
+			$mapinfo['y.min'] = min($mapinfo['y.min'], $row->y);
+			$mapinfo['y.max'] = max($mapinfo['y.max'], $row->y);
+
 			$secure[$row->x][$row->y] = $row->secure;
 		}
 
@@ -104,21 +141,13 @@ class Track {
 		foreach($data as $row) {
 			if(!isset($secure[$row->x][$row->y]))
 				continue;
-			
+
 			$place[$row->x][$row->y] = $row->cnt;
 
 			if($secure[$row->x][$row->y] == 0 && $place[$row->x][$row->y] > $maxCnt) {
 				$maxCnt = $place[$row->x][$row->y];
 			}
 		}
-
-		$q = $this->db->query("SELECT min(x) AS min_x, min(y) AS min_y, max(x) AS max_x, max(y) AS max_y FROM wiki_place WHERE x > 0 && y > 0 && x < 150 && y < 130");
-		$data = $q->fetchAll(\PDO::FETCH_OBJ);
-
-		$min_x = $data[0]->min_x;
-		$min_y = $data[0]->min_y;
-		$max_x = $data[0]->max_x;
-		$max_y = $data[0]->max_y;
 
 		$map = ImageCreateFromPNG(__DIR__ . '/../../assets/freewar/map.png');
 
@@ -128,8 +157,9 @@ class Track {
 					if(!isset($place[$x][$y]))
 						$place[$x][$y] = 0;
 
-					$white = ImageColorAllocateAlpha($map, 0, 0, 0, (int) min((127 * (($place[$x][$y]/$maxCnt) * .9 + .1)), 127));
-					ImageFilledRectangle($map, ($x-$min_x+2) * 10, ($y-$min_y+2) * 10, ($x-$min_x+3) * 10 - 1, ($y-$min_y+3) * 10 - 1, $white);
+					$white = ImageColorAllocateAlpha($map, 0, 0, 0, (int) min((127 * (($place[$x][$y] / $maxCnt) * .9 + .1)), 127));
+					ImageFilledRectangle($map, ($x - $mapinfo['x.min'] + 2) * 10, ($y - $mapinfo['y.min'] + 2) * 10,
+							($x - $mapinfo['x.min'] + 3) * 10 - 1, ($y - $mapinfo['y.min'] + 3) * 10 - 1, $white);
 				}
 			}
 		}
