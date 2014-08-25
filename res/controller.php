@@ -77,7 +77,9 @@ $cacheUsed = false;
     ->route('GET', '/npcs.css', 'App\NPCs::css')
 
     ->route('GET', '/event/record', 'App\Event::addRecord')
+
     ->route('GET', '/flatlight/v1/event.css', 'FlatLight\FlatLight::event')
+    ->route('GET', '/lightnoise/v2/event.css', 'LightNoise\LightNoise::event')
 
 	->after(function (Request $request, Response $response) use ($injector, &$cacheUsed) {
 		if (!$response->hasHeader('Content-Type') || !startsWith($response->getHeader('Content-Type'), 'text/css'))
