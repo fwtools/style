@@ -51,7 +51,7 @@ class NPCs {
 		try {
 			$q->execute([$this->request->getCookie('npc_sess_id')]);
 
-			if(($view = $q->fetch(\PDO::FETCH_OBJ)) && $view->view_time > time() - 60000) {
+			if(($view = $q->fetch(\PDO::FETCH_OBJ)) && $view->view_time > time() - 600) {
 				return $response->setBody($this->getSingleNpcStyle($view->npc_name));
 			} else {
 				return $response->setBody("/* no entry */");
