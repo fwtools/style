@@ -48,7 +48,7 @@ class NPCs {
 
 		$q = $this->db->prepare("SELECT npc_name, view_time FROM tools_npc_views WHERE npc_sess_id = ?");
 
-		try {
+		if($this->request->hasCookie('npc_sess_id')) {
 			$q->execute([$this->request->getCookie('npc_sess_id')]);
 
 			if(($view = $q->fetch(\PDO::FETCH_OBJ)) && $view->view_time > time() - 600) {
@@ -56,7 +56,7 @@ class NPCs {
 			} else {
 				return $response->setBody("/* no entry */");
 			}
-		} catch(\Exception $e) {
+		} else {
 			return $response->setBody("/* no cookie */");
 		}
 	}
