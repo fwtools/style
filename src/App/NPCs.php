@@ -46,12 +46,12 @@ class NPCs {
 		$response->addHeader('Cache-Control', 'post-check=' . (6));
 		$response->setHeader('Content-Type', 'text/css; charset=utf-8');
 
-		$q = $this->db->prepare("SELECT npc_name FROM tools_npc_views WHERE npc_sess_id = ? && view_time > ?");
+		$q = $this->db->prepare("SELECT npc_name, view_time FROM tools_npc_views WHERE npc_sess_id = ?");
 
 		try {
-			$q->execute([$this->request->getCookie('npc_sess_id'), time() - 60000]);
+			$q->execute([$this->request->getCookie('npc_sess_id')]);
 
-			if($view = $q->fetch(\PDO::FETCH_OBJ)) {
+			if(($view = $q->fetch(\PDO::FETCH_OBJ)) && $view->view_time > time() - 60000) {
 				return $response->setBody($this->getSingleNpcStyle($view->npc_name));
 			} else {
 				return $response->setBody("/* no entry */");
