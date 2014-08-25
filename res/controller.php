@@ -67,6 +67,7 @@ $cacheUsed = false;
 	->route('GET', '/kstyle/v1/style.css', 'KStyle\KStyle::main')
 
     ->route('GET', '/flatlight/v1/i/{name:[A-Za-z0-9_-]+}.{extension}', 'FlatLight\FlatLight::image')
+    ->route('GET', '/lightnoise/v2/i/{name:[A-Za-z0-9_-]+}.{extension}', 'LightNoise\LightNoise::image')
 
     ->route('GET', '/track/record/{id}/{x}/{y}', 'App\Track::addRecord')
     ->route('GET', '/track.css', 'App\Track::css')
