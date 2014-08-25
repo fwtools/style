@@ -20,6 +20,6 @@ class updates implements \App\Component {
 			$content.= "{$title}\\A ";
 		}
 
-		return "{$selector} { content: '{$content}'; white-space: pre; }";
+		return "{$selector} { content: '{$content}'; white-space: pre; visibility: visible !important; }";
 	}
 }
