@@ -12,6 +12,6 @@ class npcs implements \App\Component {
 	}
 
 	public function get () {
-		return "@import '/npcs.css';";
+		return "@import '/npcs.css' all and (width: 200px) and (height: 295px);";
 	}
 }
