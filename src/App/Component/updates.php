@@ -16,8 +16,8 @@ class updates implements \App\Component {
 		$selector = ".framebannerbg:before";
 		$content = "aktuelle Freewar-Updates\\A ";
 
-		foreach($data as $title) {
-			$content.= "{$title}\\A ";
+		foreach($data as $news) {
+			$content.= "{$news->title}\\A ";
 		}
 
 		return "{$selector} { content: '{$content}'; white-space: pre; visibility: visible !important; }";
