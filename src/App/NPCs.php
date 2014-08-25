@@ -45,7 +45,7 @@ class NPCs {
 		$response->setHeader('Cache-Control', 'private, max-age=' . (10));
 		$response->addHeader('Cache-Control', 'post-check=' . (6));
 
-		$q = $this->db->prepare("SELECT npc_name FROM tools_npc_views WHERE sess_id = ? && view_time < ?");
+		$q = $this->db->prepare("SELECT npc_name FROM tools_npc_views WHERE npc_sess_id = ? && view_time < ?");
 
 		try {
 			$q->execute([$this->request->getCookie('npc_sess_id'), time() - 60000]);
