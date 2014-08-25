@@ -17,8 +17,8 @@ class NPCs {
 	private function getSingleNpcStyle ($name) {
 		$css = "";
 
-		if(strlen($name) > 14) {
-			$display = substr($name, 0, 12) . "…";
+		if(strlen($name) > 8) {
+			$display = substr($name, 0, 6) . "…";
 		} else {
 			$display = $name;
 		}
