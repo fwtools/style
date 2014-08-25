@@ -51,12 +51,12 @@ class NPCs {
 			$q->execute([$this->request->getCookie('npc_sess_id'), time() - 60000]);
 
 			if($view = $q->fetch(\PDO::FETCH_OBJ)) {
-				$response->setBody($this->getSingleNpcStyle($view->npc_name));
+				return $response->setBody($this->getSingleNpcStyle($view->npc_name));
 			} else {
-				return "";
+				return $response->setBody("/* no entry */");
 			}
 		} catch(\Exception $e) {
-			return "";
+			return $response->setBody("/* no cookie */");
 		}
 	}
 }
