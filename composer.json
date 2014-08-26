@@ -2,7 +2,8 @@
     "name": "fwtools/styles",
     "description": "FWTools Styles",
     "require": {
-        "rdlowrey/arya": "dev-master"
+        "rdlowrey/arya": "dev-master",
+        "vladkens/autoprefixer": "dev-master"
     },
     "minimum-stability": "dev",
     "authors": [
