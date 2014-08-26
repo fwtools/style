@@ -4,7 +4,7 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "b2972a81388689a4fe5dc4a3c121f5ae",
+    "hash": "6ebc68954e18422f19af2861cdf55e64",
     "packages": [
         {
             "name": "nikic/fast-route",
@@ -55,12 +55,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/rdlowrey/Arya.git",
-                "reference": "3a4982dcd3d274a109afa1dfb73023db5ace9be7"
+                "reference": "4803210489e7cf529ca90889c5c50b926b05ddb1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/rdlowrey/Arya/zipball/3a4982dcd3d274a109afa1dfb73023db5ace9be7",
-                "reference": "3a4982dcd3d274a109afa1dfb73023db5ace9be7",
+                "url": "https://api.github.com/repos/rdlowrey/Arya/zipball/4803210489e7cf529ca90889c5c50b926b05ddb1",
+                "reference": "4803210489e7cf529ca90889c5c50b926b05ddb1",
                 "shasum": ""
             },
             "require": {
@@ -96,7 +96,7 @@
                 "microframework",
                 "routing"
             ],
-            "time": "2014-08-10 14:43:38"
+            "time": "2014-08-25 13:21:45"
         },
         {
             "name": "rdlowrey/auryn",
@@ -152,6 +152,48 @@
                 "ioc"
             ],
             "time": "2014-04-01 12:48:07"
+        },
+        {
+            "name": "vladkens/autoprefixer",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/vladkens/autoprefixer-php.git",
+                "reference": "d8ece84416ea4bf7fbed3217d7964352a3eba677"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/vladkens/autoprefixer-php/zipball/d8ece84416ea4bf7fbed3217d7964352a3eba677",
+                "reference": "d8ece84416ea4bf7fbed3217d7964352a3eba677",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "": "lib"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Vlad Pronsky",
+                    "email": "vladkens@yandex.ru"
+                }
+            ],
+            "description": "Run Autoprefixer using node.js in you php.",
+            "keywords": [
+                "Node.js",
+                "autoprefixer",
+                "css",
+                "prefixes"
+            ],
+            "time": "2014-07-24 15:57:24"
         }
     ],
     "packages-dev": [
@@ -162,7 +204,8 @@
     ],
     "minimum-stability": "dev",
     "stability-flags": {
-        "rdlowrey/arya": 20
+        "rdlowrey/arya": 20,
+        "vladkens/autoprefixer": 20
     },
     "prefer-stable": false,
     "platform": [

@@ -1,0 +1,18 @@
+root = true
+
+[*]
+end_of_line = lf
+insert_final_newline = true
+trim_trailing_whitespace = true
+
+[*.css]
+indent_style = tab
+charset = utf-8
+
+[*.js]
+indent_style = tab
+charset = utf-8
+
+[*.php]
+indent_style = tab
+charset = utf-8

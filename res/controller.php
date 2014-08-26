@@ -117,31 +117,26 @@ $cacheUsed = false;
             }, $body);
             $body = implode($imports) . $body;
 
-			require_once 'lib/CssMin.php';
+            $autoprefixer = new Autoprefixer;
 
-			$filters = [
-				"ImportImports"                 => false,
-				"RemoveComments"                => true,
-				"RemoveEmptyRulesets"           => true,
-				"RemoveEmptyAtBlocks"           => true,
-				"ConvertLevel3AtKeyframes"      => false,
-				"ConvertLevel3Properties"       => true,
-				"Variables"                     => true,
-				"RemoveLastDelarationSemiColon" => true
-			];
+            try {
+                $css = $autoprefixer->compile($body);
+            } catch (AutoprefixerException $error) {
+                echo $error->getMessage();
+            } catch (Exception $error) {
+                echo $error->getMessage();
+            }
 
-			$plugins = [
-				"Variables"                     => true,
-				"ConvertFontWeight"             => true,
-				"ConvertHslColors"              => true,
-				"ConvertRgbColors"              => true,
-				"ConvertNamedColors"            => true,
-				"CompressColorValues"           => true,
-				"CompressUnitValues"            => true,
-				"CompressExpressionValues"      => true
-			];
-
-			$body = CssMin::minify($body, $filters, $plugins);
+            $body = preg_replace('#\s+#', ' ', $body);
+            $body = preg_replace('#/\*.*?\*/#s', '', $body);
+            $body = str_replace('; ', ';', $body);
+            $body = str_replace(': ', ':', $body);
+            $body = str_replace(' {', '{', $body);
+            $body = str_replace('{ ', '{', $body);
+            $body = str_replace(', ', ',', $body);
+            $body = str_replace('} ', '}', $body);
+            $body = str_replace(';}', '}', $body);
+            $body = trim($body);
 
 			$response->setBody($body);
 
