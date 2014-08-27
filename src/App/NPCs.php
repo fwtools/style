@@ -42,8 +42,8 @@ class NPCs {
 
 		$response->setHeader('Expires', $exp_gmt);
 		$response->setHeader('Last-Modified', $mod_gmt);
-		$response->setHeader('Cache-Control', 'private, max-age=' . (10));
-		$response->addHeader('Cache-Control', 'post-check=' . (6));
+		$response->setHeader('Cache-Control', 'private, max-age=' . (12));
+		$response->addHeader('Cache-Control', 'pre-check=' . (12));
 		$response->setHeader('Content-Type', 'text/css; charset=utf-8');
 
 		$q = $this->db->prepare("SELECT npc_name, view_time FROM tools_npc_views WHERE npc_sess_id = ?");
