@@ -61,25 +61,27 @@ $cacheUsed = false;
 	})
 
 	->route('GET', '/bettersunfire/v1/style.css', 'BetterSunfire\BetterSunfire::main')
-	->route('GET', '/epicsunfire/v1/style.css', 'EpicSunfire\EpicSunfire::main')
-    ->route('GET', '/lightnoise/v2/style.css', 'LightNoise\LightNoise::main')
-	->route('GET', '/flatlight/v1/style.css', 'FlatLight\FlatLight::main')
-	->route('GET', '/kstyle/v1/style.css', 'KStyle\KStyle::main')
+    ->route('GET', '/bettersunfire/v1/event.css', 'BetterSunfire\BetterSunfire::event')
+	->route('GET', '/bettersunfire/v1/i/{name:[A-Za-z0-9_-]+}.{extension}', 'BetterSunfire\BetterSunfire::image')
 
-    ->route('GET', '/flatlight/v1/i/{name:[A-Za-z0-9_-]+}.{extension}', 'FlatLight\FlatLight::image')
+    ->route('GET', '/epicsunfire/v1/style.css', 'EpicSunfire\EpicSunfire::main')
+
+    ->route('GET', '/lightnoise/v2/style.css', 'LightNoise\LightNoise::main')
+    ->route('GET', '/lightnoise/v2/event.css', 'LightNoise\LightNoise::event')
     ->route('GET', '/lightnoise/v2/i/{name:[A-Za-z0-9_-]+}.{extension}', 'LightNoise\LightNoise::image')
+
+	->route('GET', '/flatlight/v1/style.css', 'FlatLight\FlatLight::main')
+    ->route('GET', '/flatlight/v1/event.css', 'FlatLight\FlatLight::event')
+    ->route('GET', '/flatlight/v1/i/{name:[A-Za-z0-9_-]+}.{extension}', 'FlatLight\FlatLight::image')
+
+	->route('GET', '/kstyle/v1/style.css', 'KStyle\KStyle::main')
 
     ->route('GET', '/track/record/{id}/{x}/{y}', 'App\Track::addRecord')
     ->route('GET', '/track.css', 'App\Track::css')
     ->route('GET', '/track/map/{id:.+}', 'App\Track::singleUserMap')
     ->route('GET', '/track/map', 'App\Track::multiUserMap')
-
     ->route('GET', '/npcs.css', 'App\NPCs::css')
-
     ->route('GET', '/event/record', 'App\Event::addRecord')
-
-    ->route('GET', '/flatlight/v1/event.css', 'FlatLight\FlatLight::event')
-    ->route('GET', '/lightnoise/v2/event.css', 'LightNoise\LightNoise::event')
 
 	->after(function (Request $request, Response $response) use ($injector, &$cacheUsed) {
 		if (!$response->hasHeader('Content-Type') || !startsWith($response->getHeader('Content-Type'), 'text/css'))
