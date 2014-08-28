@@ -18,6 +18,6 @@ class msf implements \App\Component {
 			$selectors[] = "#MapFrameID1 #mapx{$row->x}y{$row->y}:before";
 		}
 
-		return implode(', ', $selectors) . ' { position: absolute; left: 0; right: 0; top: 0; bottom: 0; opacity: .8; content: url(i/secure.png); }';
+		return implode(', ', $selectors) . ' { position: absolute; left: 0; right: 0; top: 0; bottom: 0; opacity: .8; content: url(/addons/msf/i/secure.png); }';
 	}
 }
