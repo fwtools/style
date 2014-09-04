@@ -74,7 +74,7 @@ $cacheUsed = false;
     ->route('GET', '/flatlight/v1/event.css', 'FlatLight\FlatLight::event')
     ->route('GET', '/flatlight/v1/i/{name:[A-Za-z0-9_-]+}.{extension}', 'FlatLight\FlatLight::image')
 
-	->route('GET', '/kstyle/v1/style.css', 'KStyle\KStyle::main')
+	->route('GET', '/kstyle/v2/style.css', 'kstyle\kstyle::main')
 
     ->route('GET', '/track/record/{id}/{x}/{y}', 'App\Track::addRecord')
     ->route('GET', '/track.css', 'App\Track::css')
