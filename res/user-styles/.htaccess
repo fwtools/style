@@ -1,4 +1,0 @@
-<Files "*\.(css)$">
-	Header set Cache-Control "max-age=7200, private"
-	Header set Cache-Control "post-check=7200"
-</Files>
