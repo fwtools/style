@@ -10,3 +10,4 @@ const DB_DB = "";
 define('CACHE_DIR', __DIR__ . "/gen/");
 
 const STYLES_PATH = "";
+
