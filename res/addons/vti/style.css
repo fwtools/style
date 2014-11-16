@@ -1,16 +1,21 @@
 .frameitembg select[name="z_pos_id"] {
-	height: 19px;
+	height: 26px;
 	width: 230px;
+	border: 1px solid rgba(0,0,0,.1);
+	line-height: 26px;
+	border-radius: 2px;
+	background: white;
 }
 
 .frameitembg select[name="z_pos_id"]  > option:hover {
-	height: 25px;
-	padding-left: 30px;
+	height: 30px;
+	line-height: 23px;
+	padding-left: 35px;
 }
 
 .frameitembg select[name="z_pos_id"]  > option:hover:after {
 	display: block;
-	margin-top: -2px;
+	margin-top: -3px;
 	font-size: 10px;
 }
 
