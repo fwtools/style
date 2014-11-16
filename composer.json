@@ -9,11 +9,11 @@
     "authors": [
         {
             "name": "Niklas Keller",
-            "email": "me@kelunik.com"
+            "email": "cembon@fwtools.de"
         },
 		{
 			"name": "Bob Weinand",
-			"email": "bobwei9@hotmail.com"
+			"email": "bwoebi@fwtools.de"
 		}
     ],
     "autoload": {
