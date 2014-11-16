@@ -1,6 +1,6 @@
 {
     "name": "fwtools/styles",
-    "description": "FWTools Styles",
+    "description": "FWTools Style Delivery",
     "require": {
         "rdlowrey/arya": "dev-master",
         "vladkens/autoprefixer": "dev-master"

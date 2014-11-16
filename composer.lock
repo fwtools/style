@@ -4,11 +4,11 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "6ebc68954e18422f19af2861cdf55e64",
+    "hash": "831025e423869de56f97aac1460e7505",
     "packages": [
         {
             "name": "nikic/fast-route",
-            "version": "dev-master",
+            "version": "v0.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/nikic/FastRoute.git",
@@ -55,18 +55,18 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/rdlowrey/Arya.git",
-                "reference": "4803210489e7cf529ca90889c5c50b926b05ddb1"
+                "reference": "35b6d505c888a29db2833035aeb43caf9f3b020f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/rdlowrey/Arya/zipball/4803210489e7cf529ca90889c5c50b926b05ddb1",
-                "reference": "4803210489e7cf529ca90889c5c50b926b05ddb1",
+                "url": "https://api.github.com/repos/rdlowrey/Arya/zipball/35b6d505c888a29db2833035aeb43caf9f3b020f",
+                "reference": "35b6d505c888a29db2833035aeb43caf9f3b020f",
                 "shasum": ""
             },
             "require": {
-                "nikic/fast-route": "dev-master",
+                "nikic/fast-route": "~0.2.0",
                 "php": ">=5.4.0",
-                "rdlowrey/auryn": "~0.13.0"
+                "rdlowrey/auryn": "~0.14.0"
             },
             "require-dev": {
                 "phpunit/phpunit": "3.7",
@@ -96,30 +96,33 @@
                 "microframework",
                 "routing"
             ],
-            "time": "2014-08-25 13:21:45"
+            "time": "2014-10-26 18:52:15"
         },
         {
             "name": "rdlowrey/auryn",
-            "version": "v0.13.0",
+            "version": "v0.14.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/rdlowrey/Auryn.git",
-                "reference": "c83b741ccddf3b8e91f02dbdc5b0eeecbf20f09f"
+                "reference": "bfee56a9e0d2e71b04f04236cb8eff2f8cb1c4fa"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/rdlowrey/Auryn/zipball/c83b741ccddf3b8e91f02dbdc5b0eeecbf20f09f",
-                "reference": "c83b741ccddf3b8e91f02dbdc5b0eeecbf20f09f",
+                "url": "https://api.github.com/repos/rdlowrey/Auryn/zipball/bfee56a9e0d2e71b04f04236cb8eff2f8cb1c4fa",
+                "reference": "bfee56a9e0d2e71b04f04236cb8eff2f8cb1c4fa",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.3.0"
             },
+            "require-dev": {
+                "phpunit/phpunit": "4.0.*"
+            },
             "type": "library",
             "autoload": {
-                "files": [
-                    "src/bootstrap.php"
-                ]
+                "psr-4": {
+                    "Auryn\\": "lib/"
+                }
             },
             "notification-url": "https://packagist.org/downloads/",
             "license": [
@@ -127,20 +130,20 @@
             ],
             "authors": [
                 {
-                    "name": "Levi Morrison",
-                    "email": "levim@php.net",
-                    "homepage": "http://morrisonlevi.github.com",
+                    "name": "Dan Ackroyd",
+                    "email": "Danack@basereality.com",
+                    "homepage": "http://www.basereality.com",
                     "role": "Developer"
                 },
                 {
                     "name": "Daniel Lowrey",
                     "email": "rdlowrey@gmail.com",
-                    "role": "Creator / Lead Developer"
+                    "role": "Creator / Main Developer"
                 },
                 {
-                    "name": "Dan Ackroyd",
-                    "email": "Danack@basereality.com",
-                    "homepage": "http://www.basereality.com",
+                    "name": "Levi Morrison",
+                    "email": "levim@php.net",
+                    "homepage": "http://morrisonlevi.github.com/",
                     "role": "Developer"
                 }
             ],
@@ -151,7 +154,7 @@
                 "dic",
                 "ioc"
             ],
-            "time": "2014-04-01 12:48:07"
+            "time": "2014-10-27 15:01:04"
         },
         {
             "name": "vladkens/autoprefixer",
@@ -159,12 +162,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/vladkens/autoprefixer-php.git",
-                "reference": "d8ece84416ea4bf7fbed3217d7964352a3eba677"
+                "reference": "3d0e552b53bd5201c84a50e5bd4b32909eecdc9d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/vladkens/autoprefixer-php/zipball/d8ece84416ea4bf7fbed3217d7964352a3eba677",
-                "reference": "d8ece84416ea4bf7fbed3217d7964352a3eba677",
+                "url": "https://api.github.com/repos/vladkens/autoprefixer-php/zipball/3d0e552b53bd5201c84a50e5bd4b32909eecdc9d",
+                "reference": "3d0e552b53bd5201c84a50e5bd4b32909eecdc9d",
                 "shasum": ""
             },
             "require": {
@@ -193,25 +196,17 @@
                 "css",
                 "prefixes"
             ],
-            "time": "2014-07-24 15:57:24"
+            "time": "2014-09-15 11:43:27"
         }
     ],
-    "packages-dev": [
-
-    ],
-    "aliases": [
-
-    ],
+    "packages-dev": [],
+    "aliases": [],
     "minimum-stability": "dev",
     "stability-flags": {
         "rdlowrey/arya": 20,
         "vladkens/autoprefixer": 20
     },
     "prefer-stable": false,
-    "platform": [
-
-    ],
-    "platform-dev": [
-
-    ]
+    "platform": [],
+    "platform-dev": []
 }
