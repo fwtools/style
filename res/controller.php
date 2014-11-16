@@ -17,7 +17,7 @@ try {
 	header("HTTP/1.1 500 Internal Server Error");
 	header("Status: 500 Internal Server Error");
     header("Content-Type: text/plain");
-	die('database connection error.');
+	die('database connection error, please check your config.');
 }
 
 $injector = new Auryn\Provider(new Auryn\ReflectionPool);
