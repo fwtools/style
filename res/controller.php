@@ -16,6 +16,7 @@ try {
 } catch (Exception $e) {
 	header("HTTP/1.1 500 Internal Server Error");
 	header("Status: 500 Internal Server Error");
+    header("Content-Type: text/plain");
 	die('database connection error.');
 }
 
