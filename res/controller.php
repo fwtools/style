@@ -16,7 +16,7 @@ try {
 } catch (Exception $e) {
 	header("HTTP/1.1 500 Internal Server Error");
 	header("Status: 500 Internal Server Error");
-	exit;
+	die('database connection error.');
 }
 
 $injector = new Auryn\Provider(new Auryn\ReflectionPool);
