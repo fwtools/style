@@ -106,7 +106,7 @@ $cacheUsed = false;
 			return;
 		}
 
-		$injector->execute(function (Response $response, App\StyleCache $cache, App\Components $components) {
+		$injector->execute(function (Request $request, Response $response, App\StyleCache $cache, App\Components $components) {
             $body = $response->getBody();
 
             foreach($components->getAllStyles() as $style) {
@@ -129,6 +129,10 @@ $cacheUsed = false;
             } catch (Exception $error) {
                 echo $error->getMessage();
             }
+
+			if ($request->hasQueryParameter('import')) {
+				$body .= '@import url("'.$request->getStringQueryParameter('import').'")';
+			}
 
             $body = preg_replace('#\s+#', ' ', $body);
             $body = preg_replace('#/\*.*?\*/#s', '', $body);
@@ -180,7 +184,8 @@ $cacheUsed = false;
             $body = "@import '/track.css?{$track_id}';" . $body;
         }
 
-        $response->setBody($body);
+
+		$response->setBody($body);
     }, ['priority' => 100])
 
 	->run();
