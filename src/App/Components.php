@@ -5,14 +5,16 @@ namespace App;
 class Components {
 	private $components;
 	private $injector;
+	private $passedComponents;
 
 	public function __construct (array $components, \Auryn\Injector $injector) {
-		$this->components = $components;
+		$this->passedComponents = $components;
+		$this->components = array_intersect(array_map(function ($item) { return substr(array_reverse(explode("/", $item))[0], 0, strrpos($item, ".") - strlen($item)); }, glob(__DIR__."/Component/*.php")), $components);
 		$this->injector = $injector;
 	}
 
 	public function getAll () {
-		return $this->components;
+		return $this->passedComponents;
 	}
 
 	public function getStyle ($component) {

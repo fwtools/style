@@ -41,10 +41,7 @@ $cacheUsed = false;
         if (!endsWith($request['REQUEST_URI_PATH'], 'style.css'))
             return false;
 
-        $components = array_intersect(
-            array_map(function ($item) { return substr(array_reverse(explode("/", $item))[0], 0, strrpos($item, ".") - strlen($item)); }, glob(__DIR__."/../src/App/Component/*")),
-            array_map('strtolower', array_keys($request->getAllQueryParameters()))
-        );
+        $components = array_map('strtolower', array_keys($request->getAllQueryParameters()));
 
         $components = new \App\Components($components, $injector);
         $cache = new App\StyleCache($request['REQUEST_URI_PATH'], $components);
